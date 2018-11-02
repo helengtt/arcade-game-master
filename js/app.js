@@ -22,13 +22,15 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     if(this.x < 5*101) {
         this.x = this.x + this.v * dt;
-        this.col = Math.floor(this.x)/101;
+        this.col = Math.floor((this.x)/101);
     } else if (this.x >= 5*101) {
         this.v = Math.ceil(Math.random()*3)*100;
         this.x = -101 + this.v * dt;
         this.col = 0;
     }
-
+    //for check
+    // console.log(this.col);
+    // console.log(this.row);
     // Handles collision with the Player
     if((this.row === player.row) && (this.col === player.col)) {
         player.col = Math.round(Math.random()*4);
