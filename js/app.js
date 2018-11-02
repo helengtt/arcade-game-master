@@ -31,12 +31,10 @@ Enemy.prototype.update = function(dt) {
     //for check
     // console.log(this.col);
     // console.log(this.row);
+    
     // Handles collision with the Player
     if((this.row === player.row) && (this.col === player.col)) {
-        player.col = Math.round(Math.random()*4);
-        player.row = Math.floor(Math.random()*2)+4;
-        player.x = player.col * 101; 
-        player.y = player.row * 83 - 40;
+        player.reset();
     }
 
 };
@@ -61,11 +59,15 @@ var Player = function() {
 Player.prototype.update = function() {
     if (this.y <= -40){
         alert('Congrats! You WON!! press OK if you want to paly again!');
-        this.col = Math.round(Math.random()*4);
-        this.row = Math.floor(Math.random()*2)+4;
-        this.x = this.col * 101; 
-        this.y = this.row * 83 - 40;
+        this.reset();
     }
+};
+
+Player.prototype.reset = function () {
+    this.col = Math.round(Math.random()*4);
+    this.row = Math.floor(Math.random()*2)+4;
+    this.x = this.col * 101; 
+    this.y = this.row * 83 - 40;
 };
 
 Player.prototype.render = function() {
