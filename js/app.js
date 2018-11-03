@@ -1,3 +1,4 @@
+'use strict';
 // Enemies our player must avoid
 var Enemy = function(row) {
     // Variables applied to each of our instances go here,
@@ -7,8 +8,7 @@ var Enemy = function(row) {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.row = row;
-    this.col = 0;
-    this.x = this.col * 101 -101;
+    this.x = -101;
     this.y = row * 83 - 20;
     this.v = Math.ceil(Math.random()*3)*100;
 
@@ -21,19 +21,18 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     if(this.x < 5*101) {
-        this.x = this.x + this.v * dt;
-        this.col = Math.floor((this.x)/101);
+        this.x = this.x + Math.round(this.v * dt);
     } else if (this.x >= 5*101) {
         this.v = Math.ceil(Math.random()*3)*100;
-        this.x = -101 + this.v * dt;
-        this.col = 0;
+        this.x = -101 + Math.round(this.v * dt);
     }
-    //for check
-    // console.log(this.col);
-    // console.log(this.row);
+    // for check
+    // console.log(this.x);
+    // console.log(this.y);
     
     // Handles collision with the Player
-    if((this.row === player.row) && (this.col === player.col)) {
+    if((this.x + 101 > player.x + 40) && (this.x + 40 <= player.x + 101) 
+    && (this.row === player.row)) {
         player.reset();
     }
 
@@ -57,6 +56,10 @@ var Player = function() {
 };
 
 Player.prototype.update = function() {
+    this.x = this.col * 101;
+    this.y = this.row * 83 - 40;
+    
+    // The Player wins when arrives the water
     if (this.y <= -40){
         alert('Congrats! You WON!! press OK if you want to paly again!');
         this.reset();
@@ -77,42 +80,34 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(keyValue) {
     switch (keyValue) {
         case 'left': 
-            if (this.x > 0 && this.x <= 4*101) {
-                this.x = this.x - 101;
+            if (this.col > 0 && this.col <= 4) {
                 this.col = this.col - 1;
                 break;
             } else if (this.x <= 0) {
-                this.x = 0;
                 this.col = 0;
                 break;
             }
         case 'up':
-            if (this.y > -40 ) { 
-                this.y = this.y - 83;
+            if (this.row > 0 ) {
                 this.row = this.row - 1;
                 break;
-            } else if (this.y <= -40){
-                this.y = -40;
+            } else if (this.row <= 0){
                 this.row = 0;
                 break;
             }
         case 'right':
-            if (this.x >= 0 && this.x < 4*101) {
-                this.x = this.x + 101;
+            if (this.col >= 0 && this.col < 4) {
                 this.col = this.col + 1;
                 break;
-            } else if (this.x >= 4*101) {
-                this.x = 404;
+            } else if (this.x >= 4) {
                 this.col = 4;
                 break;            
             }
         case 'down': 
-        if (this.y < (5*83-40) ) { 
-            this.y = this.y + 83;
+        if (this.row < 5) { 
             this.row = this.row + 1;
             break;
-        } else if (this.y >= (5*83-40)){
-            this.y = 5*83-40;
+        } else if (this.row >= 5){
             this.row = 5;
             break;
         }
